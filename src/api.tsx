@@ -1,6 +1,6 @@
 import type { Genres, Movie, Result } from "./typescript";
 
-const API_BACKEND = process.env.API_BACKEND;
+const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND;
 
 if (!API_BACKEND) {
   throw new Error("API base URL is missing");

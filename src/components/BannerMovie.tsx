@@ -54,7 +54,7 @@ const BannerMovie: React.FC<BannerMovieProps> = ({
         <ScrollButton direction="left" onClick={() => scroll("left")} />
         <div
           ref={scrollContainerRef}
-          className="flex max-w-screen space-x-2 overflow-x-hidden scrollbar-hide"
+          className="flex  max-w-screen space-x-2 overflow-x-hidden scrollbar-hide"
         >
           {displayedMovies.slice(0, 8).map((movie) => (
             <ItemsMovie key={movie.id} movie={movie} />

@@ -1,12 +1,12 @@
 import { api } from "@/api";
-import { ItemsMovie } from "../../../components/ItemsMovie";
+import { ItemsMovie } from "@/components/ItemsMovie";
 const PagePopular = async (): Promise<JSX.Element> => {
   const { results } = await api.fetchDataMovie({
     endpoint: `/movies/popular?page=1`,
   });
   return (
     <article className="p-4 ">
-      <ul className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-2">
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(160px,160px))] gap-2 justify-center">
         {results.map((movie) => (
           <ItemsMovie key={movie.id} movie={movie} />
         ))}

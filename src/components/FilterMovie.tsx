@@ -24,6 +24,7 @@ const FilterMovie = ({ genres }: { genres: Genre[] }): React.JSX.Element => {
         options={genreOptions}
         className="basic-single mb-4"
         classNamePrefix="select"
+        inputId="react-select-id"
       />
     </aside>
   );
