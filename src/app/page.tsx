@@ -10,9 +10,7 @@ const PageHome = async (): Promise<JSX.Element> => {
           key={movies.title}
           title={movies.title}
           movies={movies.movies}
-          {...(movies.title !== "Upcoming" && {
-            totalPages: movies.total_pages,
-          })}
+          totalPages={movies.total_pages}
         />
       ))}
     </>

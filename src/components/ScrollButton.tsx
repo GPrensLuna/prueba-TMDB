@@ -1,19 +1,13 @@
 interface ScrollButtonProps {
   direction: "left" | "right";
   onClick: () => void;
-  disabled: boolean;
 }
 
-const ScrollButton: React.FC<ScrollButtonProps> = ({
-  direction,
-  onClick,
-  disabled,
-}) => {
+const ScrollButton: React.FC<ScrollButtonProps> = ({ direction, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`absolute z-10 bg-white rounded-full p-2 shadow-lg transition-transform duration-300 ease-in-out hover:shadow-xl ${direction === "left" ? "left-4" : "right-4"} ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
-      disabled={disabled}
+      className={`absolute top-1/2 transform -translate-y-1/2 bg-yellow-400 p-2 rounded-full shadow-md z-10 w-10  ${direction === "left" ? "left-2" : "right-2"}`}
       aria-label={`Scroll ${direction === "left" ? "left" : "right"}`}
     >
       {direction === "left" ? (

@@ -13,80 +13,54 @@ interface BannerMovieProps {
 const BannerMovie: React.FC<BannerMovieProps> = ({
   title,
   movies,
-  totalPages,
+  totalPages = 1,
 }) => {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const calculatedTotalPages = totalPages
-    ? Math.ceil(movies.length / totalPages)
-    : 1;
+  const calculatedTotalPages = Math.ceil(movies.length / totalPages);
 
-  const scrollLeft = (): void => {
-    if (scrollRef.current) {
-      setCurrentPage((prev) => Math.max(prev - 1, 0));
-      scrollRef.current.scrollBy({
-        left: -scrollRef.current.clientWidth,
+  const scroll = (direction: "left" | "right"): void => {
+    if (scrollContainerRef.current) {
+      const scrollAmount =
+        direction === "left"
+          ? -scrollContainerRef.current.clientWidth
+          : scrollContainerRef.current.clientWidth;
+      scrollContainerRef.current.scrollBy({
+        left: scrollAmount,
         behavior: "smooth",
       });
+
+      if (direction === "left" && currentPage > 0) {
+        setCurrentPage((prev) => prev - 1);
+      } else if (
+        direction === "right" &&
+        currentPage < calculatedTotalPages - 1
+      ) {
+        setCurrentPage((prev) => prev + 1);
+      }
     }
   };
 
-  const scrollRight = (): void => {
-    if (scrollRef.current) {
-      setCurrentPage((prev) => Math.min(prev + 1, calculatedTotalPages - 1));
-      scrollRef.current.scrollBy({
-        left: scrollRef.current.clientWidth,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const displayedMovies = totalPages
-    ? movies.slice(currentPage * totalPages, (currentPage + 1) * totalPages)
-    : movies;
+  const displayedMovies = movies.slice(
+    currentPage * totalPages,
+    (currentPage + 1) * totalPages,
+  );
 
   return (
     <article className="overflow-hidden">
       <h2 className="text-xl font-bold mb-2">{title}</h2>
-      <div className="relative">
-        <ScrollButton
-          direction="left"
-          onClick={scrollLeft}
-          disabled={currentPage === 0}
-        />
+      <div className="relative w-full">
+        <ScrollButton direction="left" onClick={() => scroll("left")} />
         <div
-          ref={scrollRef}
-          className="flex space-x-2 overflow-x-auto scrollbar-hide"
+          ref={scrollContainerRef}
+          className="flex max-w-screen space-x-2 overflow-x-hidden scrollbar-hide"
         >
-          {displayedMovies.map((movie) => (
+          {displayedMovies.slice(0, 8).map((movie) => (
             <ItemsMovie key={movie.id} movie={movie} />
           ))}
         </div>
-        <ScrollButton
-          direction="right"
-          onClick={scrollRight}
-          disabled={currentPage >= calculatedTotalPages - 1}
-        />
-      </div>
-      <div className="flex justify-center mt-2">
-        <button
-          onClick={scrollLeft}
-          disabled={currentPage === 0}
-          className={`px-4 py-2 mx-1 bg-blue-500 text-white rounded ${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          Anterior
-        </button>
-        <span>
-          Página {currentPage + 1} de {calculatedTotalPages}
-        </span>
-        <button
-          onClick={scrollRight}
-          disabled={currentPage >= calculatedTotalPages - 1}
-          className={`px-4 py-2 mx-1 bg-blue-500 text-white rounded ${currentPage >= calculatedTotalPages - 1 ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          Siguiente
-        </button>
+        <ScrollButton direction="right" onClick={() => scroll("right")} />
       </div>
     </article>
   );

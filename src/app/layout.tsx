@@ -1,3 +1,5 @@
+import { api } from "@/api";
+import FilterMovie from "@/components/FilterMovie";
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
@@ -7,11 +9,12 @@ export const metadata: Metadata = {
   description: "template",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>): React.JSX.Element {
+}>): Promise<React.JSX.Element> {
+  const { genres } = await api.fetchGenres();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -21,8 +24,10 @@ export default function RootLayout({
             <Link href={"/movie/popular"}>Popular</Link>
           </nav>
         </header>
-        <main className="grid grid-cols-[minmax(80px,300px),1fr] xl:px-40 md:px-24 sm:px-10 ">
-          <aside>Filter</aside>
+        <main className="grid sm:grid-cols-[minmax(80px,250px),1fr] xl:px-40 md:px-10 sm:px-8 px-5 grid-cols-1">
+          <aside>
+            <FilterMovie genres={genres} />
+          </aside>
           <section>{children}</section>
         </main>
       </body>
