@@ -12,7 +12,10 @@ export const api = {
   }: {
     endpoint: string;
   }): Promise<Result> => {
-    const res = await fetch(`${API_BACKEND}${endpoint}`);
+    const res = await fetch(`${API_BACKEND}${endpoint}`, {
+      method: "GET",
+      credentials: "include",
+    });
     if (!res.ok) {
       throw new Error("Failed to fetch data");
     }
@@ -50,7 +53,10 @@ export const api = {
     return moviesData;
   },
   fetchGenres: async (): Promise<Genres> => {
-    const res = await fetch(`${API_BACKEND}/movies/genres`);
+    const res = await fetch(`${API_BACKEND}/movies/genres`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");

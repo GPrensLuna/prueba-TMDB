@@ -28,7 +28,7 @@ export default async function RootLayout({
               <Link href={"/"}>Home</Link>
               <Link href={"/movie/popular"}>Popular</Link>
               <Link href={"/SignIn"}>SignIn</Link>
-              <Link href={"/SignUIp"}>SignUIp</Link>
+              <Link href={"/SignUIp"}>SignUp</Link>
             </nav>
           </header>
           <main className="grid sm:grid-cols-[minmax(80px,250px),1fr] xl:px-40 md:px-10 sm:px-8 px-5 grid-cols-1">

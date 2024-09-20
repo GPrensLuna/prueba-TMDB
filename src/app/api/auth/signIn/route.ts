@@ -7,11 +7,11 @@ if (!API_BACKEND) {
   throw new Error("API base URL is missing");
 }
 
-export async function POST(req: NextRequest): Promise<Response> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const data = await req.json();
 
-    const res = await fetch(`${API_BACKEND}/user`, {
+    const res = await fetch(`${API_BACKEND}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,8 +19,8 @@ export async function POST(req: NextRequest): Promise<Response> {
       body: JSON.stringify({
         email: data.email,
         password: data.password,
-        username: data.username,
       }),
+      credentials: "include",
     });
 
     if (!res.ok) {
@@ -30,13 +30,18 @@ export async function POST(req: NextRequest): Promise<Response> {
       });
     }
 
+    const cookies = res.headers.get("set-cookie");
+
     return new NextResponse(JSON.stringify({ message: "Registro exitoso" }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(cookies ? { "Set-Cookie": cookies } : {}),
+      },
     });
-  } catch {
+  } catch (error) {
     return new NextResponse(JSON.stringify({ message: "Error al Registro" }), {
-      status: 404,
+      status: 500,
       headers: { "Content-Type": "application/json" },
     });
   }

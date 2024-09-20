@@ -12,7 +12,7 @@ const FormSignIn = (): JSX.Element => {
     action: FormikHelpers<typeof initialValues>,
   ): Promise<void> => {
     try {
-      const res = await fetch("/api/auth", {
+      const res = await fetch("/api/auth/signUp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,6 +22,7 @@ const FormSignIn = (): JSX.Element => {
           password: values.password,
           username: values.username,
         }),
+        credentials: "include",
       });
       if (!res.ok) {
         return SweetAlert.error(`Error al realizar la solicitud`);
@@ -50,7 +51,7 @@ const FormSignIn = (): JSX.Element => {
           {({ values, errors, handleChange, handleBlur }) => (
             <Form className="space-y-8">
               {dataForm.map(({ name, type, label }) => (
-                <div key={name}>
+                <article key={name}>
                   <label
                     htmlFor={name}
                     className="block text-sm font-medium text-gray-700 dark:text-white uppercase"
@@ -75,16 +76,16 @@ const FormSignIn = (): JSX.Element => {
                       </output>
                     )}
                   />
-                </div>
+                </article>
               ))}
-              <div className="flex items-center justify-between">
+              <section className="flex items-center justify-between">
                 <button
                   type="submit"
                   className="w-full inline-flex dark:text-black font-bold items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm text-#282828 hover:text-white bg-primary hover:bg-primary p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 >
                   Iniciar sesión
                 </button>
-              </div>
+              </section>
             </Form>
           )}
         </Formik>
