@@ -30,3 +30,9 @@ export interface Genre {
 export interface Genres {
   genres: Genre[];
 }
+
+export interface SignUpData {
+  email: string;
+  password: string;
+  username: string;
+}

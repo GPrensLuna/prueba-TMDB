@@ -1,6 +1,7 @@
 /* eslint-disable no-duplicate-imports */
 /* eslint-disable @typescript-eslint/naming-convention */
 "use client";
+import SweetAlert from "@/components/SweetAlert";
 import type { FormikHelpers } from "formik";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { dataForm, initialValues, validationSchema } from "../validation";
@@ -11,32 +12,35 @@ const FormSignIn = (): JSX.Element => {
     action: FormikHelpers<typeof initialValues>,
   ): Promise<void> => {
     try {
-      console.log(values);
-      // Realizamos la llamada a la API desde el cliente
-      const res = await fetch(`/api/auth`, {
+      const res = await fetch("/api/auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+          username: values.username,
+        }),
       });
-      console.log("Datos de la API:", res);
-
       if (!res.ok) {
-        throw new Error("Error en la respuesta de la red");
+        return SweetAlert.error(`Error al realizar la solicitud`);
       }
 
       const data = await res.json();
-      console.log("Datos de la API:", data);
-    } catch (error) {
-      console.error("Error durante la solicitud:", error);
+      SweetAlert.success(`${data.message}`);
+      action.resetForm();
+    } catch {
+      throw new Error("Error al registrarse");
+    } finally {
+      action.setSubmitting(false);
     }
   };
 
   return (
     <article className="min-h-[700px] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <section className="max-w-md w-full space-y-8 bg-gray-300/75 dark:bg-slate-600/90 p-10 rounded-xl">
-        <h1>Iniciar sesión</h1>
+        <h1>Register</h1>
 
         <Formik
           initialValues={initialValues}
@@ -66,9 +70,9 @@ const FormSignIn = (): JSX.Element => {
                   <ErrorMessage
                     name={name}
                     component={(): JSX.Element => (
-                      <p className="mt-1 text-sm text-red-500">
+                      <output className="mt-1 text-sm text-red-500">
                         {errors[name]}
-                      </p>
+                      </output>
                     )}
                   />
                 </div>

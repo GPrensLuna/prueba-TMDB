@@ -1,28 +1,43 @@
-/* eslint-disable no-duplicate-imports */
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { NextResponse, type NextRequest } from "next/server";
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND;
+
+if (!API_BACKEND) {
+  throw new Error("API base URL is missing");
+}
+
+export async function POST(req: NextRequest): Promise<Response> {
   try {
     const data = await req.json();
-    console.log(data);
 
-    if (!data) {
-      return NextResponse.json(
-        { message: "Solicitud inválida", status: 400 },
-        { status: 400 },
-      );
+    const res = await fetch(`${API_BACKEND}/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        username: data.username,
+      }),
+    });
+
+    if (!res.ok) {
+      return new NextResponse(JSON.stringify({ message: "Registro exitoso" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    console.log(data);
-    return NextResponse.json({
-      message: "Datos recibidos correctamente",
-      data,
+    return new NextResponse(JSON.stringify({ message: "Registro exitoso" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
-    return NextResponse.json(
-      { message: "Error procesando la solicitud", status: 500 },
-      { status: 500 },
-    );
+  } catch {
+    return new NextResponse(JSON.stringify({ message: "Error al Registro" }), {
+      status: 404,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

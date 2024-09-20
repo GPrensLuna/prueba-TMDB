@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 "use client";
+
 const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND;
 export const apiClient = {
   favoriteList: {

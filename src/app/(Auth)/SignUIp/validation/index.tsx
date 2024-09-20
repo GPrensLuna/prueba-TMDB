@@ -1,9 +1,5 @@
 import { object, string } from "yup";
-export interface FormData {
-  email: string;
-  password: string;
-  username: string;
-}
+
 export const initialValues = {
   email: "",
   password: "",
@@ -12,14 +8,14 @@ export const initialValues = {
 export const dataForm = [
   { label: "Email", name: "email", type: "email" },
   { label: "Contraseña", name: "password", type: "password" },
-  { label: "username	", name: "username	", type: "text" },
+  { label: "Username", name: "username", type: "text" },
 ];
 
 export const validationSchema = object({
   email: string()
     .email("El email debe ser válido")
     .required("El email es requerido"),
-  username: string().required("El username es requerido"),
+  username: string().required("el username es requerido"),
   password: string()
     .required("La contraseña es requerida")
     .min(8, "La contraseña debe tener al menos 8 caracteres")
