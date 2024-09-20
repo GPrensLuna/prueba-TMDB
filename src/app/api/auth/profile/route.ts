@@ -11,12 +11,14 @@ if (!API_BACKEND) {
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     const authToken = req.cookies.get("Authentication");
+
     const res = await fetch(`${API_BACKEND}/auth/profile`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authentication: `Bearer ${authToken?.value}`,
       },
+      credentials: "include",
     });
     if (!res.ok) {
       return new NextResponse(JSON.stringify({ message: "Registro exitoso" }), {
@@ -27,14 +29,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
     const cookies = res.headers.get("set-cookie");
     const data = await res.json();
-    console.log(data);
-    return new NextResponse(JSON.stringify({ data }), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...(cookies ? { "Set-Cookie": cookies } : {}),
+    return new NextResponse(
+      JSON.stringify({
+        id: data.id,
+        email: data.email,
+        username: data.username,
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...(cookies ? { "Set-Cookie": cookies } : {}),
+        },
       },
-    });
+    );
   } catch (error) {
     return new NextResponse(JSON.stringify({ message: "Error al Registro" }), {
       status: 500,

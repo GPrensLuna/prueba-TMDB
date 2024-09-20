@@ -10,22 +10,17 @@ if (!API_BACKEND) {
 export async function POST(req: NextRequest): Promise<Response> {
   try {
     const data = await req.json();
-    const authToken = req.cookies.get("Authentication");
-
     const res = await fetch(`${API_BACKEND}/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authentication: `Bearer ${authToken?.value}`,
       },
       body: JSON.stringify({
         email: data.email,
         password: data.password,
         username: data.username,
       }),
-      credentials: "include",
     });
-
     if (!res.ok) {
       return new NextResponse(JSON.stringify({ message: "Registro exitoso" }), {
         status: 404,

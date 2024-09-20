@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { Genres, Movie, Result } from "./typescript";
 
 const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND;
